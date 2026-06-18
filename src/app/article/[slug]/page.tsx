@@ -81,7 +81,7 @@ export default async function ArticlePage({
       </header>
 
       {img ? (
-        <div className="relative aspect-[16/9] mt-8 bg-border">
+        <div className="relative aspect-video mt-8 bg-border">
           <Image
             src={img}
             alt={article.mainImage?.alt || article.title}

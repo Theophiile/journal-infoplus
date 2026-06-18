@@ -1,3 +1,5 @@
+import type { Image as SanityImageType } from "sanity";
+
 import { client } from "./client";
 import {
   ARTICLES_QUERY,
@@ -25,11 +27,7 @@ export type Article = ArticleCard & {
 };
 
 // Types Sanity simplifiés pour éviter une dépendance lourde.
-export type SanityImage = {
-  asset?: { _ref: string };
-  alt?: string;
-  hotspot?: { x: number; y: number };
-};
+export type SanityImage = SanityImageType & { alt?: string };
 
 export type PortableTextBlock = Record<string, unknown>;
 

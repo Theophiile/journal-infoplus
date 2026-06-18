@@ -59,9 +59,9 @@ function Featured({
     <section className="grid gap-6 lg:grid-cols-2 items-center border-b border-border pb-10">
       <Link
         href={`/article/${article.slug}`}
-        className="block overflow-hidden group order-1 lg:order-none"
+        className="block overflow-hidden group order-1 lg:order-0"
       >
-        <div className="relative aspect-[16/10] bg-border">
+        <div className="relative aspect-8/5 bg-border">
           {img ? (
             <Image
               src={img}

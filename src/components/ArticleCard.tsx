@@ -20,7 +20,7 @@ export function ArticleCard({ article }: { article: ArticleCardType }) {
   return (
     <article className="group flex flex-col">
       <Link href={`/article/${article.slug}`} className="block overflow-hidden">
-        <div className="relative aspect-[16/10] bg-border">
+        <div className="relative aspect-8/5 bg-border">
           {img ? (
             <Image
               src={img}
