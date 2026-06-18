@@ -1,65 +1,152 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+import { ArticleCard } from "@/components/ArticleCard";
+import { getArticles } from "@/sanity/lib/fetch";
+import { isSanityConfigured } from "@/sanity/env";
+import { urlForImage } from "@/sanity/lib/image";
+
+function formatDate(iso: string) {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(iso));
+}
+
+export default async function Home() {
+  const articles = await getArticles();
+  const [featured, ...rest] = articles;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="mx-auto max-w-6xl px-4 py-8" id="articles">
+      {!isSanityConfigured ? <SetupNotice /> : null}
+
+      {articles.length === 0 ? (
+        <EmptyState configured={isSanityConfigured} />
+      ) : (
+        <>
+          {featured ? <Featured article={featured} /> : null}
+
+          {rest.length > 0 ? (
+            <section className="mt-12">
+              <h2 className="font-display text-2xl uppercase tracking-tight border-b-2 border-foreground pb-2 mb-6">
+                À la une
+              </h2>
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {rest.map((article) => (
+                  <ArticleCard key={article._id} article={article} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </>
+      )}
+    </div>
+  );
+}
+
+function Featured({
+  article,
+}: {
+  article: Awaited<ReturnType<typeof getArticles>>[number];
+}) {
+  const img = article.mainImage?.asset
+    ? urlForImage(article.mainImage).width(1400).height(800).fit("crop").url()
+    : null;
+
+  return (
+    <section className="grid gap-6 lg:grid-cols-2 items-center border-b border-border pb-10">
+      <Link
+        href={`/article/${article.slug}`}
+        className="block overflow-hidden group order-1 lg:order-none"
+      >
+        <div className="relative aspect-[16/10] bg-border">
+          {img ? (
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src={img}
+              alt={article.mainImage?.alt || article.title}
+              fill
+              priority
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center font-display text-5xl text-muted/40 uppercase">
+              Info Plus
+            </div>
+          )}
         </div>
-      </main>
+      </Link>
+      <div>
+        {article.category ? (
+          article.categorySlug ? (
+            <Link
+              href={`/rubrique/${article.categorySlug}`}
+              className="text-sm font-bold uppercase tracking-wider text-accent hover:underline"
+            >
+              {article.category}
+            </Link>
+          ) : (
+            <span className="text-sm font-bold uppercase tracking-wider text-accent">
+              {article.category}
+            </span>
+          )
+        ) : null}
+        <h2 className="mt-2 font-serif text-3xl sm:text-4xl lg:text-5xl font-black leading-tight">
+          <Link
+            href={`/article/${article.slug}`}
+            className="hover:text-accent transition-colors"
+          >
+            {article.title}
+          </Link>
+        </h2>
+        {article.excerpt ? (
+          <p className="mt-4 text-lg text-muted leading-relaxed">
+            {article.excerpt}
+          </p>
+        ) : null}
+        <time className="mt-4 block text-xs uppercase tracking-wide text-muted">
+          {formatDate(article.publishedAt)}
+        </time>
+        <Link
+          href={`/article/${article.slug}`}
+          className="mt-5 inline-block border-b-2 border-foreground font-semibold uppercase text-sm tracking-wide hover:text-accent hover:border-accent transition-colors"
+        >
+          Lire l&apos;article
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function EmptyState({ configured }: { configured: boolean }) {
+  return (
+    <div className="text-center py-20 border border-dashed border-border rounded-sm">
+      <p className="font-display text-3xl uppercase text-muted/60">
+        Aucun article pour l&apos;instant
+      </p>
+      <p className="mt-3 text-muted">
+        {configured
+          ? "Connectez-vous à l'espace rédaction pour publier votre premier article."
+          : "Configurez Sanity (voir le README) puis publiez votre premier article."}
+      </p>
+      <Link
+        href="/studio"
+        className="mt-6 inline-block bg-foreground text-white px-6 py-3 font-semibold uppercase text-sm tracking-wide hover:bg-accent transition-colors"
+      >
+        Aller à l&apos;espace rédaction
+      </Link>
+    </div>
+  );
+}
+
+function SetupNotice() {
+  return (
+    <div className="mb-8 border-l-4 border-accent bg-accent/5 px-4 py-3 text-sm">
+      <strong>Configuration requise :</strong> ajoutez vos identifiants Sanity
+      dans le fichier <code className="font-mono">.env.local</code> pour activer
+      la publication d&apos;articles (instructions dans le README).
     </div>
   );
 }
