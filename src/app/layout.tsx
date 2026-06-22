@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Anton, Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 
 const display = Anton({
   variable: "--font-display",
@@ -26,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Journal Info Plus",
   },
   description:
-    "Journal Info Plus, l'information locale de Bellegarde et ses environs depuis 1985.",
+    "Journal Info Plus, l'information locale en Auvergne-Rhône-Alpes depuis 1985.",
 };
 
 export default function RootLayout({
@@ -40,9 +38,7 @@ export default function RootLayout({
       className={`${display.variable} ${serif.variable} ${sans.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

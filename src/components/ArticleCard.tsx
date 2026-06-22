@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
-import { urlForImage } from "@/sanity/lib/image";
-import type { ArticleCard as ArticleCardType } from "@/sanity/lib/fetch";
+import type { Article } from "@/lib/supabase";
 
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("fr-FR", {
@@ -12,60 +10,30 @@ function formatDate(iso: string) {
   }).format(new Date(iso));
 }
 
-export function ArticleCard({ article }: { article: ArticleCardType }) {
-  const img = article.mainImage?.asset
-    ? urlForImage(article.mainImage).width(800).height(500).fit("crop").url()
-    : null;
-
+export function ArticleCard({ article }: { article: Article }) {
   return (
-    <article className="group flex flex-col">
-      <Link href={`/article/${article.slug}`} className="block overflow-hidden">
-        <div className="relative aspect-8/5 bg-border">
-          {img ? (
-            <Image
-              src={img}
-              alt={article.mainImage?.alt || article.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center font-display text-3xl text-muted/40 uppercase">
-              Info Plus
-            </div>
-          )}
-        </div>
-      </Link>
-      <div className="mt-3">
-        {article.category ? (
-          article.categorySlug ? (
-            <Link
-              href={`/rubrique/${article.categorySlug}`}
-              className="text-xs font-bold uppercase tracking-wider text-accent hover:underline"
-            >
-              {article.category}
-            </Link>
-          ) : (
-            <span className="text-xs font-bold uppercase tracking-wider text-accent">
-              {article.category}
-            </span>
-          )
-        ) : null}
-        <h3 className="mt-1 font-serif text-xl leading-snug font-bold">
-          <Link
-            href={`/article/${article.slug}`}
-            className="hover:text-accent transition-colors"
-          >
-            {article.title}
-          </Link>
+    <Link
+      href={`/article/${article.id}`}
+      className="group relative overflow-hidden rounded-sm bg-foreground block"
+    >
+      <div className="relative aspect-video overflow-hidden">
+        <Image
+          src={article.image_url}
+          alt={article.title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 p-4">
+        <h3 className="font-serif text-base font-bold text-white leading-snug line-clamp-2 drop-shadow">
+          {article.title}
         </h3>
-        {article.excerpt ? (
-          <p className="mt-2 text-sm text-muted line-clamp-3">{article.excerpt}</p>
-        ) : null}
-        <time className="mt-2 block text-xs uppercase tracking-wide text-muted">
-          {formatDate(article.publishedAt)}
+        <time className="mt-1 block text-[10px] uppercase tracking-widest text-white/60">
+          {formatDate(article.created_at)}
         </time>
       </div>
-    </article>
+    </Link>
   );
 }

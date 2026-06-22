@@ -21,7 +21,10 @@ export function CurrentDate() {
   }, []);
 
   return (
-    <span className="capitalize tracking-wide min-h-[1em]" suppressHydrationWarning>
+    <span
+      className="capitalize tracking-widest text-[10px] uppercase text-white/85 min-h-[1em]"
+      suppressHydrationWarning
+    >
       {date}
     </span>
   );
