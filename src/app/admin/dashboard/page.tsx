@@ -252,6 +252,9 @@ export default function AdminDashboard() {
                         {formatDate(article.expires_at)}
                       </span>
                     </p>
+                    <p className="text-xs text-[#F5C700] font-semibold mt-0.5">
+                      👁 {(article as Article & { views?: number }).views ?? 0} vue{((article as Article & { views?: number }).views ?? 0) > 1 ? "s" : ""}
+                    </p>
                   </div>
                   <button
                     onClick={() => handleDelete(article.id)}

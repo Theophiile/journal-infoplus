@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { supabaseAdmin } from "@/lib/supabase";
+import { ViewTracker } from "@/components/ViewTracker";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function ArticlePage({
 
   return (
     <div className="bg-black flex flex-col">
+      <ViewTracker articleId={article.id} />
       {/* Bouton retour */}
       <div className="px-4 py-3 flex items-center">
         <Link
