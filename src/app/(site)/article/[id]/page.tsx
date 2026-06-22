@@ -8,6 +8,8 @@ import { ViewTracker } from "@/components/ViewTracker";
 
 export const dynamic = "force-dynamic";
 
+const SITE_URL = "https://journal-infoplus.fr";
+
 export async function generateMetadata({
   params,
 }: {
@@ -16,11 +18,38 @@ export async function generateMetadata({
   const { id } = await params;
   const { data } = await supabaseAdmin
     .from("articles")
-    .select("title")
+    .select("title, image_url, created_at")
     .eq("id", id)
     .single();
   if (!data) return { title: "Article introuvable" };
-  return { title: data.title };
+
+  const url = `${SITE_URL}/article/${id}`;
+  return {
+    title: data.title,
+    description: `Retrouvez l'article "${data.title}" publié par Journal Info Plus.`,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      locale: "fr_FR",
+      url,
+      siteName: "Journal Info Plus",
+      title: data.title,
+      description: `Retrouvez l'article "${data.title}" publié par Journal Info Plus.`,
+      publishedTime: data.created_at,
+      images: [
+        {
+          url: data.image_url,
+          alt: data.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: data.title,
+      description: `Retrouvez l'article "${data.title}" publié par Journal Info Plus.`,
+      images: [data.image_url],
+    },
+  };
 }
 
 export default async function ArticlePage({
@@ -37,8 +66,28 @@ export default async function ArticlePage({
 
   if (!article) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    image: [article.image_url],
+    datePublished: article.created_at,
+    dateModified: article.created_at,
+    author: [{ "@type": "Organization", name: "Journal Info Plus" }],
+    publisher: {
+      "@type": "Organization",
+      name: "Journal Info Plus",
+      url: "https://journal-infoplus.fr",
+    },
+    url: `${SITE_URL}/article/${article.id}`,
+  };
+
   return (
     <div className="bg-black flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ViewTracker articleId={article.id} />
       {/* Bouton retour */}
       <div className="px-4 py-3 flex items-center">

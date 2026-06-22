@@ -21,12 +21,32 @@ async function getArticles(): Promise<Article[]> {
   return data ?? [];
 }
 
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  name: "Journal Info Plus",
+  url: "https://journal-infoplus.fr",
+  description:
+    "Journal indépendant d'information locale en Auvergne-Rhône-Alpes depuis 1985.",
+  foundingDate: "1985",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Bellegarde-sur-Valserine",
+    addressRegion: "Auvergne-Rhône-Alpes",
+    addressCountry: "FR",
+  },
+};
+
 export default async function Home() {
   const articles = await getArticles();
   const [featured, ...rest] = articles;
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+      />
       {articles.length === 0 ? (
         <EmptyState />
       ) : (
