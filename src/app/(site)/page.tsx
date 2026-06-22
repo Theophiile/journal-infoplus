@@ -39,7 +39,7 @@ export default async function Home() {
                 href={`/article/${featured.id}`}
                 className="group mt-4 block relative overflow-hidden rounded-sm bg-foreground"
               >
-                <div className="relative aspect-video sm:aspect-[21/9]">
+                <div className="relative aspect-video sm:aspect-21/9">
                   <Image
                     src={featured.image_url}
                     alt={featured.title}
@@ -48,7 +48,7 @@ export default async function Home() {
                     className="object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-70"
                     sizes="100vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 lg:p-12">
                   <h2 className="font-serif text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight max-w-3xl drop-shadow-sm">
@@ -81,7 +81,7 @@ export default async function Home() {
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       <h3 className="font-serif text-base sm:text-lg font-bold text-white leading-snug line-clamp-2 drop-shadow">

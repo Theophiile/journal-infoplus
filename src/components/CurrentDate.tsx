@@ -24,7 +24,7 @@ export function CurrentDate() {
 
   return (
     <span
-      className="capitalize tracking-widest text-[10px] uppercase text-white/85 min-h-[1em]"
+      className="capitalize tracking-widest text-[10px] text-white/85 min-h-[1em]"
       suppressHydrationWarning
     >
       {date}

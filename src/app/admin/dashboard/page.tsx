@@ -235,7 +235,7 @@ export default function AdminDashboard() {
                   key={article.id}
                   className="bg-white rounded-xl border border-gray-100 shadow-sm flex items-center gap-4 p-3"
                 >
-                  <div className="relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
+                  <div className="relative w-16 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-100">
                     <Image
                       src={article.image_url}
                       alt={article.title}
@@ -260,7 +260,7 @@ export default function AdminDashboard() {
                   <button
                     onClick={() => handleDelete(article.id)}
                     disabled={deletingId === article.id}
-                    className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition disabled:opacity-40"
+                    className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition disabled:opacity-40"
                     title="Supprimer"
                   >
                     {deletingId === article.id ? (
