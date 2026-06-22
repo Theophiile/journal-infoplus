@@ -17,6 +17,8 @@ export function CurrentDate() {
   const [date, setDate] = useState("");
 
   useEffect(() => {
+    // Nécessaire pour éviter le décalage d'hydratation serveur/client
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDate(formatToday());
   }, []);
 
