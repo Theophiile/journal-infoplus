@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
         <div className="flex justify-center mb-8">
           <div className="relative h-16 w-48">
             <Image
-              src="/logo-journal-infoplus.webp"
+              src="/logo-journal-infoplus.jpg"
               alt="Journal Info Plus"
               fill
               className="object-contain"

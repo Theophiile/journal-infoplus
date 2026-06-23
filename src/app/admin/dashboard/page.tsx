@@ -104,7 +104,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-3">
           <div className="relative h-8 w-28">
             <Image
-              src="/logo-journal-infoplus.webp"
+              src="/logo-journal-infoplus.jpg"
               alt="Journal Info Plus"
               fill
               className="object-contain"
