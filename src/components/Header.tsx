@@ -82,11 +82,11 @@ export function Header() {
 
           {/* Ligne fine sous le logo */}
           <div className="flex items-center gap-4 w-full max-w-2xl mt-1">
-            <span className="flex-1 h-px bg-black/35" />
-            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-black/70 font-semibold whitespace-nowrap px-2">
+            <span className="hidden sm:block flex-1 h-px bg-black/35" />
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.3em] text-black/70 font-semibold text-center px-2 min-w-0">
               Directeur de publication : Joël Vallon · Bellegarde 01200
             </p>
-            <span className="flex-1 h-px bg-black/35" />
+            <span className="hidden sm:block flex-1 h-px bg-black/35" />
           </div>
         </div>
       </div>
